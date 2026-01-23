@@ -12,7 +12,6 @@ const MessageContainer = ({ onBackUser }) => {
     messages,
     selectedConversation,
     setMessage,
-    setSelectedConversation,
   } = userConversation();
   const { socket } = useSocketContext();
   const { authUser } = useAuth();
@@ -88,57 +87,54 @@ const MessageContainer = ({ onBackUser }) => {
   };
 
   return (
-    <div className="md:min-w-[500px] h-[500px] flex flex-col py-2">
+    <div className="w-full h-full flex flex-col">
       {selectedConversation === null ? (
         <div className="flex items-center justify-center w-full h-full">
           <div
-            className="px-4 text-center text-2xl text-gray-900 font-semibold 
-        flex flex-col items-center gap-2"
+            className="px-4 text-center text-2xl font-bold flex flex-col items-center gap-4 text-base-content/70"
           >
-            <p className="text-2xl">Welcome!!👋 {authUser.username}😉</p>
-            <p className="text-lg text-gray-600">
-              Select a chat to start messaging
-            </p>
-            <TiMessages className="text-6xl text-sky-600" />
+            <p>Welcome back, {authUser.username}! 👋</p>
+            <p className="text-lg font-normal">Select a conversation to start chatting.</p>
+            <TiMessages className="text-6xl text-primary animate-bounce" />
           </div>
         </div>
       ) : (
         <>
           {/* Chat Header */}
           <div
-            className="flex justify-between gap-1 bg-sky-600 md:px-4 px-2 
-        rounded-lg h-12 items-center shadow"
+            className="flex justify-between gap-1 bg-base-200/50 backdrop-blur-sm px-4 py-2 
+        rounded-lg items-center shadow-sm border border-white/5 mb-2"
           >
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-3 w-full">
               <div className="md:hidden">
                 <button
                   onClick={() => onBackUser(true)}
-                  className="bg-white rounded-full p-1 shadow"
+                  className="btn btn-ghost btn-circle btn-sm"
                 >
-                  <IoArrowBackSharp size={22} className="text-sky-600" />
+                  <IoArrowBackSharp size={22} />
                 </button>
               </div>
               <img
-                className="rounded-full w-8 h-8 md:w-10 md:h-10 object-cover border"
+                className="rounded-full w-10 h-10 object-cover border border-base-300"
                 src={selectedConversation?.profilepic}
               />
-              <span className="text-gray-900 text-sm md:text-lg font-bold">
+              <span className="text-base-content text-lg font-bold capitalize">
                 {selectedConversation?.username}
               </span>
             </div>
           </div>
 
           {/* Messages Section */}
-          <div className="flex-1 overflow-y-auto px-2 py-2 space-y-2">
+          <div className="flex-1 overflow-y-auto px-2 py-2 space-y-2 scrollbar-thin scrollbar-thumb-rounded scrollbar-track-transparent">
             {loading && (
               <div className="flex w-full h-full flex-col items-center justify-center gap-4">
-                <div className="loading loading-spinner text-sky-600"></div>
+                <div className="loading loading-dots loading-lg text-primary"></div>
               </div>
             )}
 
             {!loading && messages?.length === 0 && (
-              <p className="text-center text-gray-400">
-                Send a message to start conversation
+              <p className="text-center text-base-content/50 mt-10">
+                Send a message to start the conversation! 🚀
               </p>
             )}
 
@@ -147,30 +143,24 @@ const MessageContainer = ({ onBackUser }) => {
               messages?.map((message) => (
                 <div key={message?._id} ref={lastMessageRef}>
                   <div
-                    className={`chat ${
-                      message.senderId === authUser._id
-                        ? "chat-end"
-                        : "chat-start"
-                    }`}
+                    className={`chat ${message.senderId === authUser._id
+                      ? "chat-end"
+                      : "chat-start"
+                      }`}
                   >
                     <div
-                      className={`chat-bubble text-white ${
-                        message.senderId === authUser._id
-                          ? "bg-sky-600"
-                          : "bg-gray-600"
-                      }`}
+                      className={`chat-bubble ${message.senderId === authUser._id
+                        ? "chat-bubble-primary text-primary-content"
+                        : "chat-bubble-secondary text-secondary-content"
+                        }`}
                     >
                       {message?.message}
                     </div>
-                    <div className="chat-footer text-[10px] text-gray-400 mt-1">
-                      {new Date(message?.createdAt).toLocaleDateString("en-IN")}{" "}
-                      {new Date(message?.createdAt).toLocaleTimeString(
-                        "en-IN",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                        }
-                      )}
+                    <div className="chat-footer opacity-50 text-xs mt-1">
+                      {new Date(message?.createdAt).toLocaleTimeString("en-IN", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
                     </div>
                   </div>
                 </div>
@@ -180,9 +170,9 @@ const MessageContainer = ({ onBackUser }) => {
           {/* Message Input */}
           <form
             onSubmit={handelSubmit}
-            className="w-full mt-2 flex items-center px-2"
+            className="w-full mt-2 flex items-center gap-2"
           >
-            <div className="w-full flex items-center bg-white rounded-full shadow px-2">
+            <div className="w-full relative flex items-center">
               <input
                 value={sendData}
                 onChange={handleMessages}
@@ -190,16 +180,13 @@ const MessageContainer = ({ onBackUser }) => {
                 id="message"
                 type="text"
                 placeholder="Type a message..."
-                className="w-full bg-transparent outline-none px-3 py-2 rounded-full text-gray-900"
+                className="input input-bordered w-full rounded-full pr-12 bg-base-200 focus:outline-none focus:ring-2 focus:ring-primary/50 border-white/10"
               />
-              <button type="submit" className="ml-2">
+              <button type='submit' className="absolute right-2 btn btn-circle btn-sm btn-ghost text-primary">
                 {sending ? (
-                  <div className="loading loading-spinner text-sky-600"></div>
+                  <div className="loading loading-spinner loading-xs"></div>
                 ) : (
-                  <IoSend
-                    size={22}
-                    className="text-sky-600 cursor-pointer rounded-full p-1 hover:bg-sky-100"
-                  />
+                  <IoSend size={20} />
                 )}
               </button>
             </div>

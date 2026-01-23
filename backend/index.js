@@ -1,35 +1,38 @@
 import express from "express"
 import dotenv from 'dotenv'
+import cors from 'cors'
 import dbConnect from "./DB/dbConnect.js";
-import authRouter from  './route/authUser.js'
+import authRouter from './route/authUser.js'
 import messageRouter from './route/messageRoute.js'
 import userRouter from './route/userRoute.js'
 import cookieParser from "cookie-parser";
 import path from "path";
 
-import {app , server} from './Socket/Socket.js'
+import { app, server } from './Socket/Socket.js'
 
 const __dirname = path.resolve();
 
-dotenv.config();
+dotenv.config({ path: "./backend/.env" });
 
+
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser())
 
-app.use('/api/auth',authRouter)
-app.use('/api/message',messageRouter)
-app.use('/api/user',userRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/message', messageRouter)
+app.use('/api/user', userRouter)
 
-app.use(express.static(path.join(__dirname,"/frontend/dist")))
+app.use(express.static(path.join(__dirname, "/frontend/dist")))
 
-app.get("/",(req,res)=>{
-    res.sendFile(path.join(__dirname,"frontend","dist","index.html"))
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"))
 })
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
 
-server.listen(PORT,()=>{
+server.listen(PORT, () => {
     dbConnect();
     console.log(`Working at ${PORT}`);
 })

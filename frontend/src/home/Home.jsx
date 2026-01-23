@@ -1,53 +1,46 @@
-import { useAuth } from "../context/AuthContext";
 import Sidebar from "./components/Sidebar.jsx";
 import MessageContainer from "./components/MessageContainer.jsx";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 
 
 
 const Home = () => {
-  const { authUser } = useAuth();
 
-  const [selectedUser , setSelectedUser] = useState(null);
-  const [isSidebarVisible , setIsSidebarVisible]= useState(true);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
-  const handelUserSelect=(user)=>{
+  const handelUserSelect = (user) => {
     setSelectedUser(user);
     setIsSidebarVisible(false);
   }
-  const handelShowSidebar=()=>{
+  const handelShowSidebar = () => {
     setIsSidebarVisible(true);
     setSelectedUser(null);
   }
 
   return (
     <div
-  className="flex justify-between w-full md:min-w-[650px] md:max-w-[65%] px-2 h-[95%] md:h-full rounded-xl shadow-lg bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0"
->
-  {/* Sidebar */}
-  <div
-    className={`w-full py-2 md:flex ${isSidebarVisible ? "" : "hidden"}`}
-  >
-    <Sidebar onSelectUser={handelUserSelect} />
-  </div>
+      className="flex justify-between w-full md:min-w-[750px] md:max-w-[80%] px-4 h-[90%] md:h-[90%] rounded-xl shadow-2xl bg-base-100/30 backdrop-blur-lg border border-white/10"
+    >
+      {/* Sidebar */}
+      <div
+        className={`w-full md:w-[350px] py-4 md:flex flex-col ${isSidebarVisible ? "" : "hidden"} border-r border-white/10 pr-2`}
+      >
+        <Sidebar onSelectUser={handelUserSelect} />
+      </div>
 
-  {/* Divider (only show when sidebar & user selected) */}
-  <div
-    className={`divider divider-horizontal px-3 md:flex ${
-      isSidebarVisible && selectedUser ? "block" : "hidden"
-    }`}
-  ></div>
+      {/* Divider (only show when sidebar & user selected) */}
+      {/* Divider is removed as we use border-r on sidebar */}
 
-  {/* Message container */}
-  <div
-    className={`flex-auto ${
-      selectedUser ? "flex" : "hidden md:flex"
-    } `}
-  >
-    <MessageContainer onBackUser={handelShowSidebar} />
-  </div>
-</div>
+      {/* Message container */}
+      <div
+        className={`flex-auto ${selectedUser ? "flex" : "hidden md:flex"
+          } pl-2`}
+      >
+        <MessageContainer onBackUser={handelShowSidebar} />
+      </div>
+    </div>
 
   );
 };

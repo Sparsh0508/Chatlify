@@ -10,8 +10,8 @@ export const userRegister = async(req,res) => {
             return res.status(500).send({success:false,message: "User already exists"});
         }
         const hashPassword = await bcrypt.hash(password,10);
-        const profileBoy = profilepic || `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const profileGirl = profilepic || `https://avatar.iran.liara.run/public/girl?username=${username}`;
+        const profileBoy = profilepic || `https://ui-avatars.com/api/?name=${fullname}`;
+        const profileGirl = profilepic || `https://ui-avatars.com/api/?name=${fullname}`;
 
         const newUser = new User({
             fullname,
