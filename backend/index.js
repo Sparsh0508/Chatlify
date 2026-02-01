@@ -43,14 +43,13 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 8000
 
+// Initialize DB Connection
+dbConnect();
+
 if (process.env.NODE_ENV !== 'production') {
     server.listen(PORT, () => {
-        dbConnect();
         console.log(`Working at ${PORT}`);
     })
-} else {
-    // On Vercel, we still need to connect to the DB
-    dbConnect();
 }
 
 export default app;
