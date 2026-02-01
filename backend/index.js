@@ -24,11 +24,22 @@ app.use('/api/auth', authRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/user', userRouter)
 
-app.use(express.static(path.join(__dirname, "/frontend/dist")))
+// Serve static files from the frontend/dist folder if it exists
+const frontendPath = path.join(__dirname, "frontend", "dist");
+app.use(express.static(frontendPath));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"))
-})
+    const indexPath = path.join(frontendPath, "index.html");
+    res.sendFile(indexPath, (err) => {
+        if (err) {
+            res.status(200).json({
+                message: "Chatlify API is running. If you're seeing this, the frontend build might not be included in the backend deployment or is at a different URL.",
+                status: "success",
+                vercel_environment: !!process.env.VERCEL
+            });
+        }
+    });
+});
 
 const PORT = process.env.PORT || 8000
 
