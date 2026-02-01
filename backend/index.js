@@ -12,7 +12,7 @@ import { app, server } from './Socket/Socket.js'
 
 const __dirname = path.resolve();
 
-dotenv.config({ path: "./backend/.env" });
+dotenv.config();
 
 
 app.use(cors());
@@ -32,7 +32,14 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 8000
 
-server.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'production') {
+    server.listen(PORT, () => {
+        dbConnect();
+        console.log(`Working at ${PORT}`);
+    })
+} else {
+    // On Vercel, we still need to connect to the DB
     dbConnect();
-    console.log(`Working at ${PORT}`);
-})
+}
+
+export default app;
