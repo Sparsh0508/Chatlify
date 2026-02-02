@@ -1,6 +1,16 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://chatlify-omega.vercel.app/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://chatlify-omega.vercel.app/api/$1"
+        },
+        {
+            "source": "/socket.io/(.*)",
+            "destination": "https://chatlify-omega.vercel.app/socket.io/$1"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
 }

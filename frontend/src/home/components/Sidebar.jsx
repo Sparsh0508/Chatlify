@@ -21,12 +21,9 @@ const Sidebar = ({ onSelectUser }) => {
   const [selectedUserId, setSetSelectedUserId] = useState(null);
   const [newMessageUsers, setNewMessageUsers] = useState('');
   const { setSelectedConversation } = userConversation();
-  const { onlineUser, socket } = useSocketContext();
-
-  const nowOnline = chatUser.map((user) => (user._id));
-  //chats function
-  // const isOnline = nowOnline.map(userId => onlineUser.includes(userId));f 
-  const isOnline = nowOnline.map(userId => (onlineUser || []).includes(userId));
+  const { onlineUsers, socket } = useSocketContext();
+  const nowOnline = (chatUser || []).map((user) => (user._id));
+  const isOnline = (nowOnline || []).map(userId => (onlineUsers || []).includes(userId));
 
   useEffect(() => {
     if (!socket) return;
