@@ -164,7 +164,7 @@ const Sidebar = ({ onSelectUser }) => {
       <div className="divider my-0 h-0.5 bg-white/10"></div>
 
       {/* Search Results */}
-      {searchUser?.length > 0 ? (
+      {Array.isArray(searchUser) && searchUser.length > 0 ? (
         <>
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-track-transparent">
             {searchUser.map((user, index) => (
@@ -205,11 +205,10 @@ const Sidebar = ({ onSelectUser }) => {
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-track-transparent my-2">
             {chatUser.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-base-content/50 font-medium text-lg mt-10">
-                <p>No chats yet! 🤷‍♂️</p>
                 <p className="text-sm">Search for a user to start.</p>
               </div>
             ) : (
-              chatUser.map((user, index) => (
+              Array.isArray(chatUser) && chatUser.map((user, index) => (
                 <div key={user._id} className="mb-1">
                   <div
                     onClick={() => handelUserClick(user)}

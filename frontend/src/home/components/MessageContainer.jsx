@@ -124,21 +124,19 @@ const MessageContainer = ({ onBackUser }) => {
               </p>
             )}
 
-            {messages?.map((message) => (
+            {Array.isArray(messages) && messages.map((message) => (
               <div key={message._id} ref={lastMessageRef}>
                 <div
-                  className={`chat ${
-                    message.senderId === authUser._id
+                  className={`chat ${message.senderId === authUser._id
                       ? "chat-end"
                       : "chat-start"
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`chat-bubble ${
-                      message.senderId === authUser._id
+                    className={`chat-bubble ${message.senderId === authUser._id
                         ? "chat-bubble-primary"
                         : "chat-bubble-secondary"
-                    }`}
+                      }`}
                   >
                     {message.message}
                   </div>
