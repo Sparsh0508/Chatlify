@@ -22,8 +22,8 @@ const Sidebar = ({ onSelectUser }) => {
   const [newMessageUsers, setNewMessageUsers] = useState('');
   const { setSelectedConversation } = userConversation();
   const { onlineUsers, socket } = useSocketContext();
-  const nowOnline = (chatUser || []).map((user) => (user._id));
-  const isOnline = (nowOnline || []).map(userId => (onlineUsers || []).includes(userId));
+  const nowOnline = Array.isArray(chatUser) ? chatUser.map((user) => (user._id)) : [];
+  const isOnline = Array.isArray(nowOnline) ? nowOnline.map(userId => (Array.isArray(onlineUsers) ? onlineUsers : []).includes(userId)) : [];
 
   useEffect(() => {
     if (!socket) return;
@@ -203,7 +203,7 @@ const Sidebar = ({ onSelectUser }) => {
         <>
           {/* Default Chat User List */}
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-track-transparent my-2">
-            {chatUser.length === 0 ? (
+            {(Array.isArray(chatUser) ? chatUser.length : 0) === 0 ? (
               <div className="flex flex-col items-center justify-center text-base-content/50 font-medium text-lg mt-10">
                 <p className="text-sm">Search for a user to start.</p>
               </div>

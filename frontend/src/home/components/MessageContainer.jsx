@@ -118,7 +118,7 @@ const MessageContainer = ({ onBackUser }) => {
               </div>
             )}
 
-            {!loading && messages?.length === 0 && (
+            {!loading && (Array.isArray(messages) ? messages.length : 0) === 0 && (
               <p className="text-center text-base-content/50 mt-10">
                 Send a message to start the conversation!
               </p>
@@ -128,14 +128,14 @@ const MessageContainer = ({ onBackUser }) => {
               <div key={message._id} ref={lastMessageRef}>
                 <div
                   className={`chat ${message.senderId === authUser._id
-                      ? "chat-end"
-                      : "chat-start"
+                    ? "chat-end"
+                    : "chat-start"
                     }`}
                 >
                   <div
                     className={`chat-bubble ${message.senderId === authUser._id
-                        ? "chat-bubble-primary"
-                        : "chat-bubble-secondary"
+                      ? "chat-bubble-primary"
+                      : "chat-bubble-secondary"
                       }`}
                   >
                     {message.message}
