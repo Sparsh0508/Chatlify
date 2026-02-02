@@ -1,21 +1,22 @@
 import mongoose from "mongoose";
 
-let isConnected = false;
+let cachedConnection = null;
 
 const dbConnect = async () => {
-    mongoose.set('strictQuery', true);
-
-    if (isConnected) {
-        console.log("Using existing database connection");
-        return;
+    if (cachedConnection && mongoose.connection.readyState === 1) {
+        return cachedConnection;
     }
 
+    mongoose.set('strictQuery', true);
+
     try {
-        const db = await mongoose.connect(process.env.MONGODB_CONNECT);
-        isConnected = db.connections[0].readyState;
+        cachedConnection = await mongoose.connect(process.env.MONGODB_CONNECT);
         console.log("Database connected");
+        return cachedConnection;
     } catch (err) {
         console.error("Database connection error:", err);
+        cachedConnection = null;
+        throw err;
     }
 }
 

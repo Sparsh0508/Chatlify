@@ -14,14 +14,17 @@ import { app, server } from './Socket/Socket.js'
 const __dirname = path.resolve();
 
 // Middleware to check DB connection
-const dbCheck = (req, res, next) => {
-    if (mongoose.connection.readyState !== 1) {
+const dbCheck = async (req, res, next) => {
+    try {
+        await dbConnect();
+        next();
+    } catch (error) {
         return res.status(503).json({
             success: false,
-            message: "Database connection is not ready. Please try again in a few seconds."
+            message: "Database connection is not ready. Please try again in a few seconds.",
+            error: error.message
         });
     }
-    next();
 };
 
 dotenv.config();
